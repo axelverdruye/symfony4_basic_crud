@@ -6,13 +6,11 @@ use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class MovieController extends ApiController
 {
     /**
-    * @Route("/movies")
-    * @Method("GET")
+    *  @Route("/movies", methods={"GET"})
     */
     public function index(MovieRepository $movieRepository)
     {
@@ -22,8 +20,7 @@ class MovieController extends ApiController
     }
 
     /**
-     * @Route("/movies/{id}")
-     * @Method("GET")
+     *  @Route("/movies/{id}", methods={"GET"})
      */
     public function show($id, MovieRepository $movieRepository)
     {
@@ -39,11 +36,11 @@ class MovieController extends ApiController
     }
 
     /**
-    * @Route("/movies")
-    * @Method("POST")
+    * @Route("/movies", methods={"POST"})
     */
     public function create(Request $request, MovieRepository $movieRepository, EntityManagerInterface $em)
     {
+
         $request = $this->transformJsonBody($request);
 
         if (! $request) {
@@ -66,14 +63,13 @@ class MovieController extends ApiController
     }
 
     /**
-    * @Route("/movies/{id}/count")
-    * @Method("POST")
+    * @Route("/movies/{id}/count", methods={"POST"})
     */
     public function increaseCount($id, EntityManagerInterface $em, MovieRepository $movieRepository)
     {
         $movie = $movieRepository->find($id);
 
-        if (! $movie) {
+        if (!$movie) {
             return $this->respondNotFound();
         }
 
@@ -84,5 +80,19 @@ class MovieController extends ApiController
         return $this->respond([
             'count' => $movie->getCount()
         ]);
+    }
+
+    private function transformJsonBody(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return false;
+        }
+        if ($data === null) {
+            return true;
+        }
+        $request->request->replace($data);
+
+        return $request;
     }
 }

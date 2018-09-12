@@ -30,7 +30,7 @@ class ApiController
      */
     protected function setStatusCode($statusCode)
     {
-        $this->statusCode = $statusCode;
+        $this->statusCode                               = $statusCode;
 
         return $this;
     }
@@ -43,7 +43,7 @@ class ApiController
      *
      * @return Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function respond($data, $headers = [])
+    public function respond($data, $headers             = [])
     {
         return new JsonResponse($data, $this->getStatusCode(), $headers);
     }
@@ -57,7 +57,7 @@ class ApiController
      */
     public function respondWithErrors($errors, $headers = [])
     {
-        $data = [
+        $data                                           = [
             'errors' => $errors,
         ];
 
@@ -71,8 +71,45 @@ class ApiController
      *
      * @return Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function respondUnauthorized($message = 'Not authorized!')
+    public function respondUnauthorized($message        = 'Not authorized!')
     {
         return $this->setStatusCode(401)->respondWithErrors($message);
+    }
+
+
+    /**
+ * Returns a 422 Unprocessable Entity
+ *
+ * @param string $message
+ *
+ * @return Symfony\Component\HttpFoundation\JsonResponse
+ */
+    public function respondValidationError($message         = 'Validation errors')
+    {
+        return $this->setStatusCode(422)->respondWithErrors($message);
+    }
+
+    /**
+     * Returns a 404 Not Found
+     *
+     * @param string $message
+     *
+     * @return Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function respondNotFound($message                = 'Not found!')
+    {
+        return $this->setStatusCode(404)->respondWithErrors($message);
+    }
+
+    /**
+     * Returns a 201 Created
+     *
+     * @param array $data
+     *
+     * @return Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function respondCreated($data                    = [])
+    {
+        return $this->setStatusCode(201)->respond($data);
     }
 }

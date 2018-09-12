@@ -1,4 +1,1 @@
 # config/routes.yaml
-movies:
-    path: /movies
-    controller: App\Controller\MovieController::movies

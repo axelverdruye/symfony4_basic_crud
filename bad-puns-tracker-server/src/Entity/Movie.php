@@ -17,8 +17,6 @@ class Movie
     private $id;
 
     /**
-     * @ORM\Count()
-     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $count;
@@ -45,28 +43,15 @@ class Movie
         return $this;
     }
 
-    /**
-     * Get the value of Count
-     *
-     * @return mixed
-     */
-    public function getCount()
+    public function getCount(): ?int
     {
         return $this->count;
     }
 
-    /**
-     * Set the value of Count
-     *
-     * @param mixed count
-     *
-     * @return self
-     */
-    public function setCount($count)
+    public function setCount($count): self
     {
         $this->count = $count;
 
         return $this;
     }
-
 }
